@@ -1,23 +1,8 @@
-# JWT Configuration
+# JWT - Technical Configuration
 
-## Overview
-Filmly uses JWT (JSON Web Tokens) for authentication and authorization across services.
+> **Nota**: Para información básica de autenticación, ver [README.md](../README.md)
 
-## Configuration
-
-### JWT_SECRET
-- **Location**: 
-  - `api-users`: `app/settings.py` (default: `"dev-secret-change-me"`)
-  - `api-catalog`: `.env` file (default: `"dev-secret-change-me"`)
-  
-- **Production**: 
-  - ⚠️ **MUST** be changed in production
-  - Use a strong random string (32+ characters)
-  - Example generation: `openssl rand -hex 32`
-  - Set via environment variable:
-    ```bash
-    JWT_SECRET=your-super-secret-production-key-here
-    ```
+## JWT Token Structure
 
 ### Token Structure
 ```json
@@ -73,14 +58,14 @@ const email = payload.email;
 
 ## Security Best Practices
 
-### ✅ Implemented
+### Implemented
 - Token stored in localStorage (not cookies to avoid CSRF)
 - HTTPS required in production
 - Token included in Authorization header (not URL)
 - 401 response triggers automatic logout
 - Expiration enforced (7 days)
 
-### 🔒 Production Checklist
+### Production Checklist
 - [ ] Change `JWT_SECRET` to strong random value
 - [ ] Enable HTTPS/TLS
 - [ ] Set appropriate CORS origins (not wildcard)

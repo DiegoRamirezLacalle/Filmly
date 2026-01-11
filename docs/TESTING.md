@@ -1,79 +1,8 @@
-# Testing Guide
+# Testing - Guía Técnica
 
-Este proyecto incluye tests unitarios y de integración para los principales servicios.
+> **Nota**: Para instrucciones básicas de testing, ver [README.md](../README.md)
 
-## Estructura de Tests
-
-```
-├── api-catalog/
-│   └── src/__tests__/          # Tests de API de catálogo
-│       ├── movies.test.ts
-│       └── reviews.test.ts
-├── api-users/
-│   └── tests/                  # Tests de API de usuarios
-│       └── test_auth.py
-└── frontend/
-    └── src/__tests__/          # Tests de componentes React
-        ├── Navbar.test.tsx
-        ├── ReviewForm.test.tsx
-        └── api.test.ts
-```
-
-## Ejecutar Tests
-
-### Todos los tests
-```bash
-make test
-```
-
-### Tests individuales por servicio
-
-**API Catalog (Node.js/Jest)**
-```bash
-cd api-catalog
-npm install
-npm test
-```
-
-**API Users (Python/pytest)**
-```bash
-cd api-users
-pip install -r requirements.txt
-pytest
-```
-
-**Frontend (React/Vitest)**
-```bash
-cd frontend
-npm install
-npm test
-```
-
-## Cobertura de Tests
-
-### API Catalog
-- ✅ Validación de parámetros en búsqueda
-- ✅ Respuesta de endpoints principales
-- ✅ Fallback a OMDb cuando Elasticsearch no tiene resultados
-- ✅ Validación de ratings (1-10)
-- ✅ Autenticación en reviews
-
-### API Users
-- ✅ Health check del servidor
-- ✅ Validación de campos en registro
-- ✅ Validación de email
-- ✅ Autenticación (login sin credenciales)
-- ✅ Acceso a rutas protegidas sin token
-
-### Frontend
-- ✅ Renderizado de componentes principales
-- ✅ Estados de autenticación en Navbar
-- ✅ Formulario de reviews con validación
-- ✅ Configuración de API service
-
-## CI/CD
-
-Los tests se pueden integrar en un pipeline de CI/CD:
+## Configuración de Testing
 
 ```yaml
 # Ejemplo para GitHub Actions

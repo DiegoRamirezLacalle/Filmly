@@ -14,7 +14,7 @@ def test_health_check():
 def test_signup_missing_fields():
     """Test registro sin campos requeridos"""
     response = client.post("/auth/signup", json={})
-    assert response.status_code == 422  # Validation error
+    assert response.status_code == 422  
 
 
 def test_signup_invalid_email():
@@ -38,7 +38,7 @@ def test_login_wrong_credentials():
         "username": "nonexistent@example.com",
         "password": "wrongpassword"
     })
-    assert response.status_code in [401, 400]  # Unauthorized or Bad Request
+    assert response.status_code in [401, 400]  
 
 
 def test_me_without_token():
