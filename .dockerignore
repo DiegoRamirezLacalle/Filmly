@@ -1,0 +1,12 @@
+.git
+node_modules
+dist
+build
+__pycache__
+*.pyc
+.env
+**/.env
+.vscode
+.idea
+db
+infra

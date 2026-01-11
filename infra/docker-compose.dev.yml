@@ -1,0 +1,93 @@
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo:6
+    ports: ["27017:27017"]
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD-SHELL", "mongosh --quiet --eval 'db.runCommand({ ping: 1 })' || exit 1"]
+      interval: 10s
+      retries: 10
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.14.1
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports: ["9200:9200"]
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+      - ./elastic/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./elastic/init:/init
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:9200 >/dev/null || exit 1"]
+      interval: 10s
+      retries: 20
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.14.1
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports: ["5601:5601"]
+    depends_on:
+      - elasticsearch
+
+
+  api-users:
+    build: ../api-users
+    env_file:
+      - ../api-users/.env.sample
+    depends_on:
+      - postgres
+    ports:
+      - "5001:5001"
+
+  postgres:
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=filmly
+      - POSTGRES_PASSWORD=filmly
+      - POSTGRES_DB=filmly
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  api-catalog:
+    build: ../api-catalog
+    env_file: ../api-catalog/.env.sample
+    ports:
+      - "5000:5000"
+    depends_on:
+      mongo:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+
+  gateway:
+    build: ../gateway
+    env_file: ../gateway/.env.sample
+    ports:
+      - "8080:8080"
+    depends_on:
+      - api-users
+      - api-catalog
+
+  frontend:
+    build: ../frontend
+    env_file: ../frontend/.env.sample
+    environment:
+      - VITE_API_BASE=http://localhost:8080
+    ports:
+      - "3000:3000"
+    depends_on:
+      - gateway
+
+
+volumes:
+  mongo_data:
+  es_data:
+  pgdata:

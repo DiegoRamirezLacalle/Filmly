@@ -1,0 +1,581 @@
+/* Tema oscuro estilo IMDb mejorado */
+:root {
+  /* Fondos - Azul oscuro (intocable) */
+  --bg-primary: #0a1929;
+  --bg-secondary: #132f4c;
+  --bg-card: #1e3a5f;
+  --bg-hover: #2a4a6f;
+  
+  /* Textos */
+  --text-primary: #ffffff;
+  --text-secondary: #b8c5d6;
+  --text-muted: #6b7e94;
+  
+  /* Dorado - Color principal para destacar */
+  --accent-gold: #ffd43b;
+  --accent-gold-dark: #fab005;
+  --accent-gold-glow: rgba(255, 212, 59, 0.3);
+  
+  /* Colores complementarios */
+  --accent-coral: #ff6b6b;
+  --accent-cyan: #4dabf7;
+  --accent-green: #51cf66;
+  --accent-purple: #cc5de8;
+  
+  /* Bordes y sombras mejoradas */
+  --border-color: #2d3e50;
+  --border-accent: #3d5a7a;
+  --shadow: rgba(0, 0, 0, 0.8);
+  --shadow-colored: rgba(10, 25, 41, 0.9);
+  --glow-gold: 0 0 20px rgba(255, 212, 59, 0.15);
+}
+
+body {
+  background-color: var(--bg-primary) !important;
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  min-height: 100vh;
+}
+
+#root {
+  background-color: var(--bg-primary);
+  min-height: 100vh;
+}
+
+/* Navbar personalizada */
+.filmly-navbar {
+  background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+  border-bottom: 1px solid var(--border-color);
+  padding: 1rem 0;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.filmly-logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--accent-gold) !important;
+  text-decoration: none !important;
+  letter-spacing: -0.5px;
+  transition: all 0.3s ease;
+  text-shadow: 0 2px 8px var(--accent-gold-glow);
+}
+
+.filmly-logo:hover {
+  color: var(--accent-gold-dark) !important;
+  filter: drop-shadow(var(--glow-gold));
+}
+
+/* Botones personalizados */
+.btn-filmly-primary {
+  background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-dark) 100%);
+  color: #000;
+  border: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 212, 59, 0.2);
+}
+
+.btn-filmly-primary:hover {
+  background: linear-gradient(135deg, var(--accent-gold-dark) 0%, var(--accent-gold) 100%);
+  color: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 212, 59, 0.4);
+}
+
+.btn-filmly-secondary {
+  background-color: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-accent);
+  transition: all 0.3s ease;
+}
+
+.btn-filmly-secondary:hover {
+  background-color: var(--bg-hover);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  box-shadow: 0 0 15px rgba(77, 171, 247, 0.2);
+}
+
+.btn-filmly-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
+}
+
+.btn-filmly-link:hover {
+  color: var(--accent-gold);
+  text-shadow: 0 0 8px var(--accent-gold-glow);
+}
+
+/* Cards de películas */
+.movie-card {
+  background: linear-gradient(145deg, var(--bg-card) 0%, #1a3552 100%);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  height: 100%;
+}
+
+.movie-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 28px var(--shadow-colored), 0 0 25px rgba(77, 171, 247, 0.1);
+  border-color: var(--accent-gold);
+  background: linear-gradient(145deg, #1a3552 0%, var(--bg-card) 100%);
+}
+
+.movie-card img {
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+  border-bottom: 2px solid var(--accent-gold);
+  transition: all 0.4s ease;
+}
+
+.movie-card:hover img {
+  filter: brightness(1.1) saturate(1.2);
+}
+
+.movie-card-body {
+  padding: 1rem;
+}
+
+.movie-card-title {
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.movie-card-meta {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.movie-card-rating {
+  background: linear-gradient(135deg, var(--accent-coral) 0%, #ff8787 100%);
+  color: #fff;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+  box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+  font-size: 0.9rem;
+}
+
+.movie-card-rating::before {
+  content: '⭐';
+  font-size: 0.85rem;
+}
+
+/* Forms */
+.form-control,
+.form-select {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  transition: all 0.2s;
+}
+
+.form-control:focus,
+.form-select:focus {
+  background-color: var(--bg-card);
+  border-color: var(--accent-cyan);
+  color: var(--text-primary);
+  box-shadow: 0 0 0 0.2rem rgba(77, 171, 247, 0.25), var(--glow-gold);
+}
+
+.form-control::placeholder {
+  color: var(--text-muted);
+}
+
+.form-label {
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+/* Empty states */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--text-secondary);
+}
+
+.empty-state-icon {
+  font-size: 4rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.empty-state-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.empty-state-text {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+/* Badges */
+.badge {
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  font-weight: 500;
+}
+
+.badge-type {
+  background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-dark) 100%);
+  color: #000;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.3rem 0.6rem;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 6px rgba(255, 212, 59, 0.3);
+}
+
+/* Loading spinner */
+.spinner-border {
+  color: var(--accent-gold);
+  filter: drop-shadow(var(--glow-gold));
+}
+
+/* Alert personalizada */
+.alert {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.alert-danger {
+  border-left: 4px solid #dc3545;
+}
+
+.alert-success {
+  border-left: 4px solid var(--accent-green);
+  background: linear-gradient(90deg, rgba(81, 207, 102, 0.1) 0%, transparent 100%);
+}
+
+.alert-info {
+  border-left: 4px solid #17a2b8;
+}
+
+/* Paginación */
+.pagination {
+  gap: 0.5rem;
+}
+
+.page-link {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  transition: all 0.2s;
+}
+
+.page-link:hover {
+  background-color: var(--bg-hover);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+}
+
+.page-item.active .page-link {
+  background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-dark) 100%);
+  border-color: var(--accent-gold);
+  color: #000;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(255, 212, 59, 0.3);
+}
+
+.page-item.disabled .page-link {
+  background-color: var(--bg-secondary);
+  border-color: var(--border-color);
+  color: var(--text-muted);
+}
+
+/* Review cards */
+.review-card {
+  background: linear-gradient(145deg, var(--bg-card) 0%, #1a3552 100%);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.review-card:hover {
+  border-color: var(--accent-cyan);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(77, 171, 247, 0.15);
+}
+
+.review-rating {
+  color: var(--accent-coral);
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+  letter-spacing: 2px;
+}
+
+/* Modal */
+.modal-content {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.modal-header {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modal-footer {
+  border-top: 1px solid var(--border-color);
+}
+
+.btn-close {
+  filter: invert(1);
+}
+
+/* Movie detail page */
+.movie-detail-container {
+  background-color: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-top: 2rem;
+  border: 1px solid var(--border-color);
+}
+
+.movie-poster-large {
+  border-radius: 12px;
+  border: 3px solid var(--accent-gold);
+  box-shadow: 0 8px 24px var(--shadow-colored), var(--glow-gold);
+}
+
+.rating-box {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.rating-score {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent-coral) 0%, #ff8787 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 8px rgba(255, 107, 107, 0.3));
+}
+
+.rating-label {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* Hero Section - Títulos principales */
+.hero-title {
+  font-size: 3rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 4px 20px rgba(77, 171, 247, 0.3);
+}
+
+.hero-subtitle {
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  font-weight: 400;
+}
+
+/* Search Box mejorado */
+.search-section {
+  background: linear-gradient(145deg, var(--bg-card) 0%, #1a3552 100%);
+  border: 1px solid var(--border-accent);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 24px var(--shadow-colored);
+  transition: all 0.3s ease;
+}
+
+.search-section:hover {
+  border-color: var(--accent-gold);
+  box-shadow: 0 12px 32px var(--shadow-colored), var(--glow-gold);
+}
+
+/* Mejorar inputs de búsqueda */
+.form-control-lg,
+.form-select-lg {
+  background-color: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  padding: 0.75rem 1.25rem;
+  transition: all 0.3s ease;
+}
+
+.form-control-lg:focus,
+.form-select-lg:focus {
+  background-color: var(--bg-secondary);
+  border-color: var(--accent-gold);
+  color: var(--text-primary);
+  box-shadow: 0 0 0 0.3rem rgba(255, 212, 59, 0.15), var(--glow-gold);
+  transform: translateY(-2px);
+}
+
+.form-control-lg::placeholder {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+/* Back button mejorado */
+.btn-back {
+  background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-hover) 100%);
+  border: 2px solid var(--border-accent);
+  color: var(--text-primary);
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-back::before {
+  content: '←';
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.btn-back:hover {
+  background: linear-gradient(135deg, var(--bg-hover) 0%, var(--bg-card) 100%);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  transform: translateX(-4px);
+  box-shadow: 0 4px 16px rgba(77, 171, 247, 0.2);
+}
+
+/* Review section title */
+.reviews-section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 3px solid var(--accent-gold);
+  position: relative;
+}
+
+.reviews-section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 100px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-coral) 0%, transparent 100%);
+}
+
+/* Escribir reseña button mejorado */
+.btn-write-review {
+  background: linear-gradient(135deg, var(--accent-purple) 0%, #b842de 100%);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(204, 93, 232, 0.3);
+}
+
+.btn-write-review:hover {
+  background: linear-gradient(135deg, #b842de 0%, var(--accent-purple) 100%);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(204, 93, 232, 0.5);
+}
+
+/* Review form container */
+.review-form-container {
+  background: linear-gradient(145deg, var(--bg-card) 0%, #1a3552 100%);
+  border: 2px solid var(--accent-purple);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+  box-shadow: 0 4px 16px rgba(204, 93, 232, 0.2);
+}
+
+.review-form-title {
+  color: var(--accent-purple);
+  font-weight: 700;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+}
+
+/* Range slider mejorado */
+.form-range {
+  height: 8px;
+  background: linear-gradient(90deg, var(--bg-secondary) 0%, var(--bg-hover) 100%);
+  border-radius: 8px;
+}
+
+.form-range::-webkit-slider-thumb {
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-dark) 100%);
+  border: 3px solid var(--bg-primary);
+  box-shadow: 0 2px 8px rgba(255, 212, 59, 0.4);
+  cursor: pointer;
+}
+
+.form-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-dark) 100%);
+  border: 3px solid var(--bg-primary);
+  box-shadow: 0 2px 8px rgba(255, 212, 59, 0.4);
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .movie-card img {
+    height: 300px;
+  }
+  
+  .movie-detail-container {
+    padding: 1rem;
+  }
+  
+  .hero-title {
+    font-size: 2rem;
+  }
+  
+  .search-section {
+    padding: 1.5rem;
+  }
+}
