@@ -64,11 +64,15 @@ router.get("/detail", async (req, res) => {
  */
 router.get("/search-es", async (req, res) => {
   const q = String(req.query.q || "").trim();
+  const typeParam = String(req.query.type || "").trim();
+  const type = (typeParam === "movie" || typeParam === "series" || typeParam === "episode") 
+    ? typeParam 
+    : undefined;
   if (!q) return res.status(400).json({ error: "q query param required", details: "Provide search query" });
 
   const omdbFallback = async (reason: "es_error" | "no_hits") => {
     try {
-      const data = await searchMoviesByQuery(q, 1);
+      const data = await searchMoviesByQuery(q, 1, type);
       const db = await getDb();
       const collection = db.collection("movies_cache");
 
@@ -123,54 +127,66 @@ router.get("/search-es", async (req, res) => {
   };
 
   try {
+    const queryBody: any = {
+      bool: {
+        should: [
+          {
+            match: {
+              Title: {
+                query: q,
+                boost: 5,
+              },
+            },
+          },
+          {
+            match: {
+              Director: {
+                query: q,
+                boost: 7,
+              },
+            },
+          },
+          {
+            match: {
+              Actors: {
+                query: q,
+                boost: 6,
+              },
+            },
+          },
+          {
+            match: {
+              Plot: {
+                query: q,
+                boost: 1,
+              },
+            },
+          },
+          {
+            match: {
+              Genre: {
+                query: q,
+                boost: 1,
+              },
+            },
+          },
+        ],
+        minimum_should_match: 1,
+      },
+    };
+
+    // Si hay filtro de tipo, agregar un filter must
+    if (type) {
+      queryBody.bool.filter = {
+        term: {
+          Type: type,
+        },
+      };
+    }
+
     const result = await elastic.search({
       index: indexName,
-      query: {
-        bool: {
-          should: [
-            {
-              match: {
-                Title: {
-                  query: q,
-                  boost: 1,
-                },
-              },
-            },
-            {
-              match: {
-                Director: {
-                  query: q,
-                  boost: 5,
-                },
-              },
-            },
-            {
-              match: {
-                Actors: {
-                  query: q,
-                  boost: 5,
-                },
-              },
-            },
-            {
-              match: {
-                Plot: {
-                  query: q,
-                  boost: 0.3,
-                },
-              },
-            },
-            {
-              match: {
-                Genre: {
-                  query: q,
-                  boost: 0.3,
-                },
-              },
-            },
-          ],
-        },
-      },
+      query: queryBody,
       size: 10,
     });
 

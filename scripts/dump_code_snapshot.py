@@ -12,7 +12,6 @@ Usage (from Filmly/):
 from __future__ import annotations
 
 import argparse
-import fnmatch
 import os
 from pathlib import Path
 
@@ -38,22 +37,6 @@ DEFAULT_EXCLUDE_DIRS = {
 
 DEFAULT_EXCLUDE_FILES = {
     ".DS_Store",
-    "package-lock.json",
-    "yarn.lock",
-    "pnpm-lock.yaml",
-    "CODE_SNAPSHOT.md",
-}
-
-# Glob patterns to exclude. These are matched against the workspace-relative POSIX path.
-# Keep this conservative: prefer excluding secret-bearing files and generated artifacts.
-DEFAULT_EXCLUDE_GLOBS = {
-    "**/.env",
-    "**/.env.*",
-}
-
-ALLOWLIST_GLOBS = {
-    "**/.env.example",
-    "**/.env.sample",
 }
 
 # Extensions that are usually binary or not useful for a code snapshot.
@@ -132,20 +115,8 @@ def looks_binary(path: Path, max_probe_bytes: int = 8192) -> bool:
         return True
 
 
-def _matches_any_glob(posix_rel: str, patterns: set[str]) -> bool:
-    return any(fnmatch.fnmatch(posix_rel, pat) for pat in patterns)
-
-
-def should_exclude(
-    path: Path,
-    repo_root: Path,
-    exclude_dirs: set[str],
-    exclude_files: set[str],
-    exclude_globs: set[str],
-    allowlist_globs: set[str],
-) -> bool:
+def should_exclude(path: Path, repo_root: Path, exclude_dirs: set[str], exclude_files: set[str]) -> bool:
     rel = path.relative_to(repo_root)
-    rel_posix = rel.as_posix()
 
     # Skip any excluded directory in the relative parts
     for part in rel.parts[:-1]:
@@ -153,12 +124,6 @@ def should_exclude(
             return True
 
     if rel.name in exclude_files:
-        return True
-
-    if _matches_any_glob(rel_posix, allowlist_globs):
-        return False
-
-    if _matches_any_glob(rel_posix, exclude_globs):
         return True
 
     return False
@@ -175,13 +140,7 @@ def detect_lang(path: Path) -> str:
     return LANG_BY_EXT.get(ext, "")
 
 
-def iter_files(
-    repo_root: Path,
-    exclude_dirs: set[str],
-    exclude_files: set[str],
-    exclude_globs: set[str],
-    allowlist_globs: set[str],
-) -> list[Path]:
+def iter_files(repo_root: Path, exclude_dirs: set[str], exclude_files: set[str]) -> list[Path]:
     files: list[Path] = []
     for root, dirs, filenames in os.walk(repo_root):
         root_path = Path(root)
@@ -191,7 +150,7 @@ def iter_files(
 
         for filename in filenames:
             file_path = root_path / filename
-            if should_exclude(file_path, repo_root, exclude_dirs, exclude_files, exclude_globs, allowlist_globs):
+            if should_exclude(file_path, repo_root, exclude_dirs, exclude_files):
                 continue
             if file_path.is_symlink():
                 continue
@@ -220,10 +179,8 @@ def main() -> int:
 
     exclude_dirs = set(DEFAULT_EXCLUDE_DIRS)
     exclude_files = set(DEFAULT_EXCLUDE_FILES)
-    exclude_globs = set(DEFAULT_EXCLUDE_GLOBS)
-    allowlist_globs = set(ALLOWLIST_GLOBS)
 
-    files = iter_files(repo_root, exclude_dirs, exclude_files, exclude_globs, allowlist_globs)
+    files = iter_files(repo_root, exclude_dirs, exclude_files)
 
     lines: list[str] = []
     lines.append("# Filmly — Code Snapshot")
@@ -232,8 +189,6 @@ def main() -> int:
     lines.append("")
     lines.append("Notas:")
     lines.append("- Se excluyen carpetas pesadas: `db/`, `node_modules/`, `.git/`, builds/caches.")
-    lines.append("- Se excluyen secretos típicos: `.env` (se permiten `.env.sample` y `.env.example`).")
-    lines.append("- Se excluyen locks grandes: `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`.")
     lines.append(f"- Se omiten binarios y archivos > {args.max_file_bytes} bytes.")
     lines.append("")
 
